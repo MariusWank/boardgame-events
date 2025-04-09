@@ -57,7 +57,7 @@ function App() {
       >
         {/* Left side: always visible */}
         <div>
-          <Link to="/">Home</Link> | <Link to="/admin">Admin</Link>
+          <Link to="/boardgame-events">Home</Link> | <Link to="/admin">Admin</Link>
         </div>
 
         {/* Right side: inline login form if logged out; "Welcome, Admin!" + logout button if logged in */}
@@ -92,7 +92,7 @@ function App() {
       </nav>
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/boardgame-events" element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />} />
         {/* 
           Removed the /login route since we do inline login now.

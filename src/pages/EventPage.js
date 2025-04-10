@@ -1,9 +1,9 @@
-// src/pages/EventPage.js
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase';
 import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
 import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
+import './EventPage.css';
 
 function EventPage() {
   const { eventId } = useParams();
@@ -11,40 +11,31 @@ function EventPage() {
   const [loading, setLoading] = useState(true);
   const [guestName, setGuestName] = useState('');
 
-  // Ensure user is signed in anonymously if not logged in
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (!user) {
-        signInAnonymously(auth).catch((error) => {
-          console.error('Anonymous sign-in error:', error);
-        });
+        signInAnonymously(auth).catch(console.error);
       }
     });
   }, []);
 
-  // Fetch the event data from Firestore
   useEffect(() => {
     const fetchEvent = async () => {
       try {
         const docRef = doc(db, 'events', eventId);
         const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setEventData(docSnap.data());
-        } else {
-          console.log('No such event!');
-        }
+        if (docSnap.exists()) setEventData(docSnap.data());
+        else console.log('No such event!');
       } catch (error) {
         console.error('Error fetching event:', error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchEvent();
   }, [eventId]);
 
-  // Register the user for the event
   const handleRegister = async () => {
     if (!guestName) return;
     try {
@@ -52,52 +43,52 @@ function EventPage() {
       await updateDoc(docRef, {
         participants: arrayUnion(guestName),
       });
-      alert('Erfolgreich registriert!!');
-      setGuestName('');
-      // Refresh local data
       const updatedSnap = await getDoc(docRef);
       setEventData(updatedSnap.data());
+      setGuestName('');
     } catch (error) {
-      console.error('Fehler beim regestrieren:', error);
+      console.error('Fehler beim registrieren:', error);
     }
   };
 
-  if (loading) return <p>Lade event ...</p>;
-  if (!eventData) return <p>Event nicht gefunden.</p>;
+  if (loading) return <p className="center">Lade event ...</p>;
+  if (!eventData) return <p className="center">Event nicht gefunden.</p>;
 
-  const { title, date, time, maxParticipants, participants } = eventData;
+  const { title, date, time, maxParticipants, participants, gameInfo } = eventData;
   const remainingSlots = maxParticipants - (participants?.length || 0);
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Event: {title}</h2>
-      <p>
-        Datum: {date}
-        <br />
-        Uhrzeit: {time}
-        <br />
-        Maximale Spielerzahl: {maxParticipants}
-        <br />
-        Bisher angemeldet: {participants?.length || 0}
-      </p>
-      {remainingSlots > 0 ? (
-        <>
-          <p>Noch {remainingSlots} freie Plätze!</p>
-          <input
-            type="text"
-            placeholder="Hier könnte dein Name stehen"
-            value={guestName}
-            onChange={(e) => setGuestName(e.target.value)}
-          />
-          <button onClick={handleRegister}>Anmelden</button>
-        </>
-      ) : (
-        <p>Das Event ist voll!</p>
-      )}
-      <h3>Teilnehmer:</h3>
-      <ul>
-        {participants && participants.map((p, index) => <li key={index}>{p}</li>)}
-      </ul>
+    <div className="event-container">
+      <div className="event-content">
+        <h2>Event: {title}</h2>
+        <div className="event-details">
+          <p>Datum: {date}<br />Uhrzeit: {time}<br />Maximale Spielerzahl: {maxParticipants}<br />Bisher angemeldet: {participants?.length || 0}</p>
+        </div>
+
+        {remainingSlots > 0 ? (
+          <>
+            <p>Noch {remainingSlots} freie Plätze!</p>
+            <input type="text" placeholder="Hier könnte dein Name stehen" value={guestName} onChange={(e) => setGuestName(e.target.value)} />
+            <button onClick={handleRegister}>Anmelden</button>
+          </>
+        ) : (
+          <p>Das Event ist voll!</p>
+        )}
+
+        <h3>Teilnehmer:</h3>
+        <ul>
+          {participants && participants.map((p, index) => <li key={index}>{p}</li>)}
+        </ul>
+        {gameInfo && (
+          <div className="game-details">
+            <img src={gameInfo.image} alt="Game Box" className="bgg-game-image" />
+            <p><strong>Genres:</strong> {gameInfo.categories.join(', ')}</p>
+            <p><strong>Spielzeit:</strong> {gameInfo.playtime} min</p>
+            <p><strong>Rating:</strong> {Math.round(gameInfo.averageRating * 10) / 10}/10</p>
+            <p><strong>Komplexität:</strong> {Math.round(gameInfo.complexity * 10) / 10}/5</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

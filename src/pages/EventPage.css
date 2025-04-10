@@ -1,0 +1,74 @@
+/* src/pages/EventPage.css */
+.event-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    min-height: 50vh; /* Full height of the viewport */
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .event-details {
+    text-align: left;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .event-content {
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .event-content input {
+    margin-top: 10px;
+    padding: 10px;
+    width: 80%;
+    max-width: 300px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .event-content button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #242729;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .event-content button:hover {
+    background-color: #000000;
+  }
+  
+  .event-content ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .event-content li {
+    margin: 5px 0;
+  }
+  
+  .center {
+    text-align: center;
+    margin-top: 40vh;
+    font-size: 18px;
+  }
+  
+  .bgg-game-image {
+    max-width: 200px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+  }

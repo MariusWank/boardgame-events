@@ -1,0 +1,50 @@
+/* src/pages/HomePage.css */
+.home-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    background-color: #ffffff;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .home-content {
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 700px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .event-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .event-list li {
+    margin: 12px 0;
+  }
+  
+  .event-link {
+    display: inline-block;
+    font-size: 18px;
+    text-decoration: none;
+    color: #1a73e8;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  
+  .event-link:hover {
+    color: #0c47b7;
+    text-decoration: underline;
+  }
+  
+  .event-date {
+    color: #555;
+    font-size: 0.9em;
+  }
+  

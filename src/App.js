@@ -4,6 +4,7 @@ import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from
 import AdminPage from './pages/AdminPage';
 import EventPage from './pages/EventPage';
 import HomePage from './pages/HomePage';
+import './App.css'; // Import the CSS file
 
 function App() {
   const [user, setUser] = useState(null);
@@ -39,7 +40,6 @@ function App() {
     const auth = getAuth();
     try {
       await signOut(auth);
-      alert('Logged out successfully.');
     } catch (error) {
       console.error('Error logging out:', error);
     }
@@ -47,33 +47,26 @@ function App() {
 
   return (
     <Router>
-      <nav 
-        style={{ 
-          padding: '10px', 
-          borderBottom: '1px solid #ccc', 
-          display: 'flex', 
-          alignItems: 'center' 
-        }}
-      >
+      <nav className="navbar">
         {/* Left side: always visible */}
-        <div>
-          <Link to="/boardgame-events">Home</Link> | <Link to="/admin">Admin</Link>
+        <div className="nav-left">
+          <Link to="/boardgame-events">Home</Link> <Link to="/admin">Admin</Link>
         </div>
 
         {/* Right side: inline login form if logged out; "Welcome, Admin!" + logout button if logged in */}
-        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className="nav-right">
           {!user ? (
             // Inline login form
-            <form onSubmit={handleLogin} style={{ display: 'flex', gap: '5px' }}>
-              <input 
-                type="email" 
+            <form onSubmit={handleLogin} className="inline-login-form">
+              <input
+                type="email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <input 
-                type="password" 
+              <input
+                type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -96,7 +89,6 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />
         {/* 
           Removed the /login route since we do inline login now.
-          <Route path="/login" element={<AdminLogin />} />
         */}
         <Route path="/event/:eventId" element={<EventPage />} />
       </Routes>

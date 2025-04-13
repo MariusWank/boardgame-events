@@ -1,7 +1,7 @@
 {
   "name": "boardgame-events",
   "version": "0.1.0",
-  "homepage": "https://MWank.github.io/boardgame-events",
+  "homepage": "https://MariusWank.github.io/boardgame-events",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",

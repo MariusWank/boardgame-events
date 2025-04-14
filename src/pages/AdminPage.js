@@ -6,7 +6,7 @@ import {
 } from 'firebase/auth';
 import { collection, addDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../firebase';
-import { format } from 'date-fns';
+import { format, isValid, toDate} from 'date-fns';
 import './AdminPage.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -15,7 +15,9 @@ import levenshtein from 'fast-levenshtein'; // Optional but better than string l
 
 function AdminPage() {
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState('');
+  // For date, maintain a raw value for the controlled input and a formatted value if needed.
+  const [rawDate, setRawDate] = useState('');
+  const [formattedDate, setFormattedDate] = useState('');
   const [time, setTime] = useState('');
   const [maxParticipants, setMaxParticipants] = useState('');
   const [email, setEmail] = useState('');
@@ -115,12 +117,27 @@ function AdminPage() {
     setGameInfo(data);
   };
 
+  // New handler for the date change event.
+  const handleDateChange = (e) => {
+    const value = e.target.value;
+    if (isValid(new Date(value))){
+      setRawDate(value);
+      // Format the date if needed. Make sure not to pass the formatted string to the date input's value.
+      setFormattedDate(format(new Date(value), 'dd.MM.yyyy'));
+    }
+    else {
+      setRawDate("");
+      setFormattedDate("");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const docRef = await addDoc(collection(db, 'events'), {
         title,
-        date,
+        // Use the formatted date for storage or display as needed.
+        date: formattedDate,
         time,
         maxParticipants: Number(maxParticipants),
         participants: [],
@@ -140,8 +157,20 @@ function AdminPage() {
       <div className="login-container">
         <h2>Admin Login</h2>
         <form onSubmit={handleLogin} className="login-form">
-          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
           <button type="submit">Log in</button>
         </form>
       </div>
@@ -152,10 +181,35 @@ function AdminPage() {
     <div className="admin-page-container">
       <h2>Neues Event erstellen</h2>
       <form onSubmit={handleSubmit} className="admin-form">
-        <input type="text" placeholder="Titel" value={title} onChange={(e) => setTitle(e.target.value)} onBlur={handleTitleBlur} required />
-        <input type="date" onChange={(e) => setDate(format(new Date(e.target.value), 'dd.MM.yyyy'))} required />
-        <input type="time" value={time} onChange={(e) => setTime(e.target.value)} required />
-        <input type="number" min="1" placeholder="Spielerzahl" value={maxParticipants} onChange={(e) => setMaxParticipants(e.target.value)} required />
+        <input
+          type="text"
+          placeholder="Titel"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          onBlur={handleTitleBlur}
+          required
+        />
+        {/* Update the date input to be controlled using rawDate */}
+        <input
+          type="date"
+          value={rawDate}
+          onChange={handleDateChange}
+          required
+        />
+        <input
+          type="time"
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+          required
+        />
+        <input
+          type="number"
+          min="1"
+          placeholder="Spielerzahl"
+          value={maxParticipants}
+          onChange={(e) => setMaxParticipants(e.target.value)}
+          required
+        />
         <button type="submit">Event erstellen</button>
         {gameInfo && (
           <div className="game-preview">

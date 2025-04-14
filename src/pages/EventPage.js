@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase';
-import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
-import { useParams } from 'react-router-dom';
+import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, deleteDoc } from 'firebase/firestore';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import './EventPage.css';
 
@@ -11,6 +11,7 @@ function EventPage() {
   const [loading, setLoading] = useState(true);
   const [guestName, setGuestName] = useState('');
   const [user, setUser] = useState(null); // Add user state
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -54,6 +55,8 @@ function EventPage() {
   };
 
   const removeParticipants = async (participant) => {
+    const confirmDelete = window.confirm(`Sicher, dass du ${participant} entfernen willst?`);
+    if (!confirmDelete) return;
     try{
       const docRef = doc(db, 'events', eventId);
       await updateDoc(docRef, {
@@ -61,6 +64,20 @@ function EventPage() {
       });
       const updatedSnap = await getDoc(docRef);
       setEventData(updatedSnap.data());
+    }
+    catch (error) {
+      console.error('Fehler beim entfernen des Nutzers:', error);
+    }
+  }
+
+  const deleteEvent = async () => {
+    const confirmDelete = window.confirm("Sicher, dass du das Event löschen willst?");
+    if (!confirmDelete) return;
+    try{
+      const docRef = doc(db, 'events', eventId);
+      await deleteDoc(docRef);
+      setEventData(null);
+      navigate('/')
     }
     catch (error) {
       console.error('Fehler beim entfernen des Nutzers:', error);
@@ -110,6 +127,11 @@ function EventPage() {
             <p><strong>Rating:</strong> {Math.round(gameInfo.averageRating * 10) / 10}/10</p>
             <p><strong>Komplexität:</strong> {Math.round(gameInfo.complexity * 10) / 10}/5</p>
           </div>
+        )}
+        {user && (
+          <button className='delete-button'
+            onClick={deleteEvent}> DELETE EVENT
+          </button>
         )}
       </div>
     </div>

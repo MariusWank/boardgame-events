@@ -46,6 +46,21 @@
     border-radius: 6px;
     cursor: pointer;
   }
+
+  .event-content button.RemoveButton {
+    margin-top: 10px;
+    padding: 0px 0px;
+    font-size: 16px;
+    background-color: #0d81ce00;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .event-content button.RemoveButton:hover {
+    background-color: #ffffff;
+  }
   
   .event-content button:hover {
     background-color: #000000;

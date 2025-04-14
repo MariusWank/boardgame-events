@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase';
-import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { useParams } from 'react-router-dom';
-import { getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import './EventPage.css';
 
 function EventPage() {
@@ -10,15 +10,7 @@ function EventPage() {
   const [eventData, setEventData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [guestName, setGuestName] = useState('');
-
-  useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        signInAnonymously(auth).catch(console.error);
-      }
-    });
-  }, []);
+  const [user, setUser] = useState(null); // Add user state
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -36,6 +28,16 @@ function EventPage() {
     fetchEvent();
   }, [eventId]);
 
+  // Add auth state observer
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const handleRegister = async () => {
     if (!guestName) return;
     try {
@@ -50,6 +52,20 @@ function EventPage() {
       console.error('Fehler beim registrieren:', error);
     }
   };
+
+  const removeParticipants = async (participant) => {
+    try{
+      const docRef = doc(db, 'events', eventId);
+      await updateDoc(docRef, {
+        participants: arrayRemove(participant),
+      });
+      const updatedSnap = await getDoc(docRef);
+      setEventData(updatedSnap.data());
+    }
+    catch (error) {
+      console.error('Fehler beim entfernen des Nutzers:', error);
+    }
+  }
 
   if (loading) return <p className="center">Lade event ...</p>;
   if (!eventData) return <p className="center">Event nicht gefunden.</p>;
@@ -77,7 +93,14 @@ function EventPage() {
 
         <h3>Teilnehmer:</h3>
         <ul>
-          {participants && participants.map((p, index) => <li key={index}>{p}</li>)}
+          {participants && 
+            participants.map((p, index) => (
+              <li key={index}>
+                  {p}
+                  {user && (
+                    <button onClick={ () => removeParticipants(p)} className='RemoveButton'>❌</button>
+                  )}
+              </li>))}
         </ul>
         {gameInfo && (
           <div className="game-details">

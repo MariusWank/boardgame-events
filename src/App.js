@@ -77,7 +77,7 @@ function App() {
           ) : (
             // Logged in
             <>
-              <span>Welcome, Admin!</span>
+              <span>Wilkommen, Brettspielfan!</span>
               <button onClick={handleLogout}>Logout</button>
             </>
           )}

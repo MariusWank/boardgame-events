@@ -182,25 +182,12 @@ function AdminPage() {
       <h2>Neues Event erstellen</h2>
       <form onSubmit={handleSubmit} className="admin-form">
         <input
-          type="text"
-          placeholder="Titel"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          onBlur={handleTitleBlur}
-          required
-        />
-        {/* Update the date input to be controlled using rawDate */}
-        <input
-          type="date"
-          value={rawDate}
-          onChange={handleDateChange}
-          required
-        />
-        <input
-          type="time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          required
+        type="text"
+        placeholder="Titel"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        onBlur={handleTitleBlur}
+        required
         />
         <input
           type="number"
@@ -210,6 +197,25 @@ function AdminPage() {
           onChange={(e) => setMaxParticipants(e.target.value)}
           required
         />
+        {/* Update the date input to be controlled using rawDate */}
+        <label>
+          Date:
+          <input
+            type="date"
+            value={rawDate}
+            onChange={handleDateChange}
+            required
+          />
+        </label>
+        <label>
+          Time:
+          <input
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            required
+          />
+          </label>
         <button type="submit">Event erstellen</button>
         {gameInfo && (
           <div className="game-preview">

@@ -39,7 +39,7 @@ function HomePage() {
   return (
     <div className="home-container">
       <div className="home-content">
-        <h1>🎲 Wilkommen im Brettspiel-Paradies 🎲</h1>
+        <h1>Wilkommen im Brettspiel-Paradies</h1>
         <h2>Bevorstehende Spieleabende</h2>
         {events.length === 0 ? (
           <p>Noch ist nichts geplant.</p>

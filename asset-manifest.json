@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/boardgame-events/static/css/main.04d4b08d.css",
-    "main.js": "/boardgame-events/static/js/main.aca770cd.js",
+    "main.css": "/boardgame-events/static/css/main.cad3d631.css",
+    "main.js": "/boardgame-events/static/js/main.43d0bbed.js",
     "static/js/453.12cfd6f8.chunk.js": "/boardgame-events/static/js/453.12cfd6f8.chunk.js",
     "index.html": "/boardgame-events/index.html",
-    "main.04d4b08d.css.map": "/boardgame-events/static/css/main.04d4b08d.css.map",
-    "main.aca770cd.js.map": "/boardgame-events/static/js/main.aca770cd.js.map",
+    "main.cad3d631.css.map": "/boardgame-events/static/css/main.cad3d631.css.map",
+    "main.43d0bbed.js.map": "/boardgame-events/static/js/main.43d0bbed.js.map",
     "453.12cfd6f8.chunk.js.map": "/boardgame-events/static/js/453.12cfd6f8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.04d4b08d.css",
-    "static/js/main.aca770cd.js"
+    "static/css/main.cad3d631.css",
+    "static/js/main.43d0bbed.js"
   ]
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from 'firebase/auth';
 import AdminPage from './pages/AdminPage';
 import EventPage from './pages/EventPage';
@@ -50,7 +50,7 @@ function App() {
       <nav className="navbar">
         {/* Left side: always visible */}
         <div className="nav-left">
-          <Link to="/boardgame-events">Home</Link> <Link to="/admin">Admin</Link>
+          <Link to="/">Home</Link> <Link to="/admin">Admin</Link>
         </div>
 
         {/* Right side: inline login form if logged out; "Welcome, Admin!" + logout button if logged in */}
@@ -76,20 +76,17 @@ function App() {
             </form>
           ) : (
             // Logged in
-            <>
-              <span>Wilkommen, Brettspielfan!</span>
+            <div className='LogoutBar'>
+              <span className='WelcomeText'>Wilkommen, Brettspielfan!</span>
               <button onClick={handleLogout}>Logout</button>
-            </>
+            </div>
           )}
         </div>
       </nav>
 
       <Routes>
-        <Route path="/boardgame-events" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />} />
-        {/* 
-          Removed the /login route since we do inline login now.
-        */}
         <Route path="/event/:eventId" element={<EventPage />} />
       </Routes>
     </Router>

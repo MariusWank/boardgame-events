@@ -24,15 +24,29 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
   background-color: var(--nav-bg-color);
   padding: 10px 20px;
   border-bottom: 1px solid #ccc;
   color: var(--nav-text-color);
+  gap: 10px;
+}
+
+.LogoutBar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 /* Left side links */
+.nav-left {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+
 .nav-left a {
-  display: inline-block; /* Turn the link into an inline-block for proper padding */
+  display: inline-block;
   margin-right: 10px;
   background-color: #31343a;
   color: #fff;
@@ -40,12 +54,12 @@ body {
   border-radius: 4px;
   text-decoration: none;
   font-weight: 500;
-  transition: background-color 0.3s ease; /* Optional: smooth out the hover transition */
+  transition: background-color 0.3s ease;
 }
 
 .nav-left a:hover {
   background-color: var(--primary-color);
-  text-decoration: none; /* Remove underline on hover */
+  text-decoration: none;
 }
 
 /* Right side container */
@@ -53,11 +67,13 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* Inline login form */
 .inline-login-form {
   display: flex;
+  flex-wrap: wrap;
   gap: 5px;
 }
 
@@ -81,5 +97,16 @@ button {
 }
 
 button:hover {
-  background-color: var(--button-hover-color)
+  background-color: var(--button-hover-color);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .inline-login-form {
+    display: none;
+  }
+
+  .WelcomeText {
+    display: none;
+  }
 }
